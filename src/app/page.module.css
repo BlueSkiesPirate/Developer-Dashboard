@@ -1,0 +1,28 @@
+.background{
+   background-color: var(--backgroundColor);
+}
+
+.navbar{
+    background-color: var(--navbarColor);
+}
+
+.buttonLight{
+    background-color: var(--buttonLight);
+}
+
+.scrollPanel{
+    background-color: var(--scrollPanels);
+}
+
+.buttonDark{
+    background-color: var(--buttonDark);
+}
+
+.componentLight{
+    background-color: var(--componentLight);
+}
+
+.rounded{
+    border: 1px solid var(--backgroundColor);
+    border-radius: 12px;
+}
