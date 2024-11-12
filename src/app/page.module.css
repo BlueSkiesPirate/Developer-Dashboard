@@ -26,3 +26,7 @@
     border: 1px solid var(--backgroundColor);
     border-radius: 12px;
 }
+
+.noDisplay{
+    display: none;
+}
