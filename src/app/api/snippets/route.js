@@ -1,27 +1,23 @@
-import connectMongoDB from "@/lib/mongodb";
+import connectMongoDB from "@/lib/db";
 import Snippet from "../../../../models/snippet";
 import { NextResponse } from "next/server";
 
-export async function POST(request) {
-  const { title, description } = await request.json();
-  await connectMongoDB();
-  await Snippet.create({
-    title,
-    description,
-  });
-
-  return NextResponse.json({ message: "snippet created!" }, { status: 201 });
+export async function POST(req) {
+  try {
+    await connectMongoDB();
+    const { title, description } = await req.json();
+    const newSnippet = new Snippet({ title, description });
+    await newSnippet.save();
+    return NextResponse.json(newSnippet, { status: 201 });
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-export async function GET(id) {
-  await connectMongoDB;
-  const snippets = await Snippet.find();
-  return NextResponse.json({ snippets });
-}
-
-export async function DELETE(request) {
-  const id = request.nextUrl.searchParams.get("id");
-  await connectMongoDB;
-  await Snippet.findByIdAndDelete(id);
-  return NextResponse.json({ message: "deleted" }, { status: 200 });
+export async function GET() {
+  try {
+    await connectMongoDB();
+    const Snippets = await Snippet.find({});
+    return NextResponse.json(Snippets, { status: 201 });
+  } catch (err) {}
 }

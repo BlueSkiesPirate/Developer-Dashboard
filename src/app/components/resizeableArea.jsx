@@ -10,14 +10,10 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-// import { useState } from "react";
+
 
 export default function ResizeableArea() {
 
-  // const [displayedSnippet, setDisplayedSnippet] = useState(null)
-  // const handleDisplayedSnippet = () => {
-  //   setDisplayedSnippet(id)
-  // }
 
   return (
     <ResizablePanelGroup direction="horizontal">
