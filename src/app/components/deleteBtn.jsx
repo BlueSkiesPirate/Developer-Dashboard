@@ -1,5 +1,6 @@
 "use client"
 import { useRouter } from "next/navigation"
+import { BiTrash } from "react-icons/bi";
 
 export default function DeleteBtn({ id }) {
     const router = useRouter();
@@ -19,6 +20,7 @@ export default function DeleteBtn({ id }) {
         }
     }
     return (
-        <button onClick={removeSnippet} className={`bg-white text-black w-20 mr-2 `}>delete</button>
+
+        <BiTrash onClick={removeSnippet} className={`text-red-400 border-white text-black text-xl `} />
     )
 }

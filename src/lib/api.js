@@ -13,6 +13,18 @@ export const createSnippet = async (data) => {
 
 export const getSnippets = async () => {
   const res = await api.get("/snippets");
-  console.log(res.data);
   return res.data;
+};
+
+export const getSnippet = async (id) => {
+  try {
+    const res = await api.get(`/snippets/${id}`);
+    return res.data;
+  } catch (err) {
+    console.log(
+      "Error fetching snippet:",
+      err.response ? err.response.data : err.message
+    );
+    throw new Error("Failed to fetch snippet");
+  }
 };

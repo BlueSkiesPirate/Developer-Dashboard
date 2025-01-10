@@ -2,9 +2,9 @@ import { ResizablePanel } from "@/components/ui/resizable"
 import styles from "../page.module.css"
 import ToolMenu from "./toolsMenu";
 
-export default function ViewSnippet({ id }) {
-    // const { id } = params;
-    // console.log(id)
+export default function ViewSnippet({ snippetData }) {
+
+
     return (
         <ResizablePanel
             className={`${styles.scrollPanel} ${styles.rounded} p-2 h-full `}
@@ -33,7 +33,7 @@ export default function ViewSnippet({ id }) {
                     <div
                         className={`${styles.background} h-10 w-full text-white ${styles.rounded} flex pl-2 items-center`}
                     >
-                        Modal
+                        {snippetData.title}
                     </div>
                     <div
                         className={`${styles.background} h-10 w-64 text-white ml-2 ${styles.rounded} flex pl-2 items-center justify-between`}
@@ -50,7 +50,7 @@ export default function ViewSnippet({ id }) {
                 <div
                     className={`${styles.background} h-32 w-full text-white ${styles.rounded} flex pl-2 mt-2`}
                 >
-                    Descriptiton
+                    {snippetData.description}
                 </div>
                 <div
                     className={`${styles.background} h-5/6 w-full text-white ${styles.rounded} flex pl-2 mt-2 `}
