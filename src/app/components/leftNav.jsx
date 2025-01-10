@@ -1,5 +1,5 @@
 import styles from "../page.module.css"
-import AddSnippet from "../addSnippet/addSnippet"
+import AddSnippet from "../addSnippet/page"
 export default function LeftNav() {
     return (
         <>

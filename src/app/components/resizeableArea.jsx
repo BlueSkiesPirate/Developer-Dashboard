@@ -1,4 +1,4 @@
-
+"use client"
 import styles from "../page.module.css";
 import uStyles from "./resizeableArea.module.css"
 import Link from "next/link";
@@ -10,16 +10,19 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-// import { useState } from "react";
+import { useState } from "react";
+
 
 export default function ResizeableArea() {
+  const [viewData, setViewData] = useState({ title: "title", description: "description" })
 
-  // const [displayedSnippet, setDisplayedSnippet] = useState(null)
-  // const handleDisplayedSnippet = () => {
-  //   setDisplayedSnippet(id)
-  // }
+  const handleDataFromView = (data) => {
+
+    setViewData(data)
+  }
 
   return (
+
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel className={`${styles.scrollPanel} ${styles.rounded}`}>
         <div className={`h-16 w-full flex items-center pl-2`}>
@@ -31,12 +34,12 @@ export default function ResizeableArea() {
         </div>
 
         <div className={`h-full w-full px-2 pt-2`}>
-          <Snippets />
+          <Snippets onSendData={handleDataFromView} />
 
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle className={`${styles.background} w-2`} />
-      <ViewSnippet />
+      <ViewSnippet snippetData={viewData} />
     </ResizablePanelGroup>
   );
 }
