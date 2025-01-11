@@ -1,8 +1,10 @@
 "use client"
 import { useState } from "react"
 import styles from "../page.module.css"
+import { useEffect } from "react";
+import { deleteSnippet } from "@/lib/api";
 
-export default function ToolMenu() {
+export default function ToolMenu({ id, edit }) {//{ id }, { edit }
 
     const [noDisplay, setNoDisplay] = useState(true);
     const handleDisplay = () => {
@@ -13,6 +15,17 @@ export default function ToolMenu() {
         }
 
     }
+    const handleEdit = async () => {
+        edit()
+    }
+
+    const handleDelete = async () => {
+        const confirmed = confirm("are you sure?")
+        if (confirmed) {
+            await deleteSnippet(id)
+        }
+
+    }
 
     return (
         <>
@@ -20,9 +33,9 @@ export default function ToolMenu() {
                 <button onClick={handleDisplay} className={``}>tools</button>
                 <div className={`${styles.componentLight} ${styles.rounded} ${noDisplay ? styles.noDisplay : " "} w-full h-32 absolute top-0 flex flex-col justify-center items-center`}>
                     <div className={`border-b-2 border-black w-1/2 flex justify-center items-center cursor-pointer`} onClick={handleDisplay}>A</div>
-                    <div className={`cursor-pointer`}>edit</div>
+                    <button className={`cursor-pointer`} onClick={handleEdit}>edit</button>
                     <div>Copy</div>
-                    <div className={`mt-3`}>Del</div>
+                    <button className={`mt-3`} onClick={handleDelete}>Del</button>
                 </div>
             </div>
         </>
