@@ -32,3 +32,8 @@ export const getSnippet = async (title) => {
 export const deleteSnippet = async (id) => {
   await api.delete(`/snippets/${id}`);
 };
+
+export const updateSnippet = async (id, data) => {
+  console.log(id, data);
+  await api.put(`/snippets/${id}`, data);
+};

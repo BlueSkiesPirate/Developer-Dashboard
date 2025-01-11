@@ -18,7 +18,7 @@ export async function PUT(req, { params }) {
     const { title, description } = await req.json();
     const updatedSnippet = await Snippet.findByIdAndUpdate(
       slug,
-      { title, description },
+      { title: title, description: description },
       { new: true }
     );
     if (!updatedSnippet) {
