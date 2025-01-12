@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { updateSnippet } from "@/lib/api";
 import { FaRegEyeSlash } from "react-icons/fa";
 
-export default function ViewSnippet({ snippetData, isViewingSnippet }) {
+export default function ViewSnippet({ snippetData, isViewingSnippet, stopViewingSnippet }) {
 
     const [edittingSnippet, setEdittingSnippet] = useState(false);
     const [title, SetTitle] = useState(snippetData.title)
@@ -45,7 +45,7 @@ export default function ViewSnippet({ snippetData, isViewingSnippet }) {
 
     }
 
-    console.log(isViewingSnippet)
+
     return (
         <ResizablePanel className={`${styles.scrollPanel} ${styles.rounded} p-2 h-full `}>
             {isViewingSnippet ?
@@ -102,7 +102,7 @@ export default function ViewSnippet({ snippetData, isViewingSnippet }) {
                                     1 day ago
                                 </div>
                             </div>
-                            <ToolMenu id={id} edit={toggleEditMode} />
+                            <ToolMenu snippetData={snippetData} edit={toggleEditMode} stopViewingSnippet={stopViewingSnippet} />
                         </div>
 
                         {edittingSnippet ?

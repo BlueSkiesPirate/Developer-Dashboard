@@ -16,12 +16,17 @@ import { useState } from "react";
 export default function ResizeableArea() {
   const [viewData, setViewData] = useState({ title: "title", description: "description" })
   const [isViewingSnippet, setIsViewingSnippet] = useState(false)
+  const [reloadSnippets, setReloadSnippets] = useState(false)
 
   const handleDataFromView = (data) => {
     setIsViewingSnippet(!isViewingSnippet)
     setViewData(data)
   }
 
+  const stopViewingSnippet = () => {
+    setIsViewingSnippet(false)
+    setReloadSnippets(true)
+  }
   return (
 
     <ResizablePanelGroup direction="horizontal" >
@@ -35,12 +40,12 @@ export default function ResizeableArea() {
         </div>
 
         <div className={`h-full w-full px-2 pt-2  overflow-y-scroll`}>
-          <Snippets onSendData={handleDataFromView} />
+          <Snippets onSendData={handleDataFromView} DoReload={reloadSnippets} />
 
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle className={`${styles.background} w-2`} />
-      <ViewSnippet snippetData={viewData} isViewingSnippet={isViewingSnippet} />
+      <ViewSnippet snippetData={viewData} isViewingSnippet={isViewingSnippet} stopViewingSnippet={stopViewingSnippet} />
     </ResizablePanelGroup>
   );
 }

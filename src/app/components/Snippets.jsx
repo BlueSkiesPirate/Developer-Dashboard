@@ -6,7 +6,7 @@ import DeleteBtn from "./deleteBtn";
 import { getSnippets } from "@/lib/api";
 import { FiEye } from "react-icons/fi";
 
-export default function Snippets({ onSendData }) {
+export default function Snippets({ onSendData, DoReload }) {
     const [snippets, setSnippets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [reload, setReload] = useState(false)
@@ -34,7 +34,7 @@ export default function Snippets({ onSendData }) {
         };
 
         fetchSnippets();
-    }, [reload]);
+    }, [reload, DoReload]);
 
     if (loading) return <p className="text-white">Loading...</p>;
 

@@ -2,6 +2,7 @@
 import { deleteSnippet } from "@/lib/api";
 import { useRouter } from "next/navigation"
 import { BiTrash } from "react-icons/bi";
+import Snippets from "./Snippets";
 
 export default function DeleteBtn({ id, onDelete, title }) {
 
