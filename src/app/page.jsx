@@ -11,7 +11,7 @@ export default function Home() {
 
       <div className={`w-full flex flex-col px-2 `}>
         <TopNav />
-        <div className={`h-full w-full mt-2`}>
+        <div className={`h-full w-full mt-2 overflow-hidden`}>
           {/**This is the container for the resizable sections */}
           <ResizeableArea />
         </div>

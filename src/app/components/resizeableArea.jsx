@@ -15,15 +15,16 @@ import { useState } from "react";
 
 export default function ResizeableArea() {
   const [viewData, setViewData] = useState({ title: "title", description: "description" })
+  const [isViewingSnippet, setIsViewingSnippet] = useState(false)
 
   const handleDataFromView = (data) => {
-
+    setIsViewingSnippet(!isViewingSnippet)
     setViewData(data)
   }
 
   return (
 
-    <ResizablePanelGroup direction="horizontal">
+    <ResizablePanelGroup direction="horizontal" >
       <ResizablePanel className={`${styles.scrollPanel} ${styles.rounded}`}>
         <div className={`h-16 w-full flex items-center pl-2`}>
           <div
@@ -33,13 +34,13 @@ export default function ResizeableArea() {
           </div>
         </div>
 
-        <div className={`h-full w-full px-2 pt-2`}>
+        <div className={`h-full w-full px-2 pt-2  overflow-y-scroll`}>
           <Snippets onSendData={handleDataFromView} />
 
         </div>
       </ResizablePanel>
       <ResizableHandle withHandle className={`${styles.background} w-2`} />
-      <ViewSnippet snippetData={viewData} />
+      <ViewSnippet snippetData={viewData} isViewingSnippet={isViewingSnippet} />
     </ResizablePanelGroup>
   );
 }

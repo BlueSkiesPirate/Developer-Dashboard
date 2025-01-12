@@ -3,8 +3,9 @@ import styles from "../page.module.css"
 import ToolMenu from "./toolsMenu";
 import { useState, useEffect } from "react";
 import { updateSnippet } from "@/lib/api";
+import { FaRegEyeSlash } from "react-icons/fa";
 
-export default function ViewSnippet({ snippetData }) {
+export default function ViewSnippet({ snippetData, isViewingSnippet }) {
 
     const [edittingSnippet, setEdittingSnippet] = useState(false);
     const [title, SetTitle] = useState(snippetData.title)
@@ -44,88 +45,94 @@ export default function ViewSnippet({ snippetData }) {
 
     }
 
-
+    console.log(isViewingSnippet)
     return (
-        <ResizablePanel
-            className={`${styles.scrollPanel} ${styles.rounded} p-2 h-full `}
-        >
-            <div className="flex justify-between">
-                <div
-                    className={`h-10 w-3/4 ${styles.background} ${styles.rounded} flex`}
-                >
-                    <div
-                        className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} `}
-                    >
-                        tags +
-                    </div>
-                    <div
-                        className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} ml-2 `}
-                    >
-                        {" "}
-                        react
-                    </div>
-                </div>
-                <button onClick={saveChanges} className={` bg-green-500 rounded w-20 h-10 mr-5 ${edittingSnippet ? "" : "hidden"}`}>Update</button>
-            </div>
-            <div
-                className={`h-full
-           pb-52`}
-            >
-                <div className={`flex mt-2 `}>
-
-
-                    {edittingSnippet ? <input
-                        type="text"
-                        value={tempTitle}
-                        onChange={(e) => setTempTitle(e.target.value)}
-                        className={`${styles.background} h-10 w-full text-white ${styles.rounded} flex pl-2 items-center`}
-                    >
-                    </input>
-
-                        : <div className={`${styles.background} h-10 w-full text-white ${styles.rounded} flex pl-2 items-center`} >
-                            {title}
-                        </div>
-
-                    }
-
-
-
-
-                    <div
-                        className={`${styles.background} h-10 w-64 text-white ml-2 ${styles.rounded} flex pl-2 items-center justify-between`}
-                    >
-                        <p>Last edit</p>
+        <ResizablePanel className={`${styles.scrollPanel} ${styles.rounded} p-2 h-full `}>
+            {isViewingSnippet ?
+                <>
+                    <div className="flex justify-between">
                         <div
-                            className={`h-full w-24 flex justify-center items-center ${styles.buttonDark} ${styles.rounded}`}
+                            className={`h-10 w-3/4 ${styles.background} ${styles.rounded} flex`}
                         >
-                            1 day ago
+                            <div
+                                className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} `}
+                            >
+                                tags +
+                            </div>
+                            <div
+                                className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} ml-2 `}
+                            >
+                                {" "}
+                                react
+                            </div>
                         </div>
+                        <button onClick={saveChanges} className={` bg-green-500 rounded w-20 h-10 mr-5 ${edittingSnippet ? "" : "hidden"}`}>Update</button>
                     </div>
-                    <ToolMenu id={id} edit={toggleEditMode} />
-                </div>
-
-                {edittingSnippet ?
-                    <input
-                        type="text"
-                        value={tempDescription}
-                        onChange={(e) => setTempDescription(e.target.value)}
-                        className={`${styles.background} h-32 w-full text-white align-text-top ${styles.rounded} flex pl-2 mt-2`}
+                    <div
+                        className={`h-full
+           pb-52`}
                     >
-                    </input>
+                        <div className={`flex mt-2 `}>
 
-                    : <div className={`${styles.background} h-32 w-full text-white ${styles.rounded} flex pl-2 mt-2`} >
-                        {description}
+
+                            {edittingSnippet ? <input
+                                type="text"
+                                value={tempTitle}
+                                onChange={(e) => setTempTitle(e.target.value)}
+                                className={`${styles.background} h-10 w-full text-white ${styles.rounded} flex pl-2 items-center`}
+                            >
+                            </input>
+
+                                : <div className={`${styles.background} h-10 w-full text-white ${styles.rounded} flex pl-2 items-center`} >
+                                    {title}
+                                </div>
+
+                            }
+
+
+
+
+                            <div
+                                className={`${styles.background} h-10 w-64 text-white ml-2 ${styles.rounded} flex pl-2 items-center justify-between`}
+                            >
+                                <p>Last edit</p>
+                                <div
+                                    className={`h-full w-24 flex justify-center items-center ${styles.buttonDark} ${styles.rounded}`}
+                                >
+                                    1 day ago
+                                </div>
+                            </div>
+                            <ToolMenu id={id} edit={toggleEditMode} />
+                        </div>
+
+                        {edittingSnippet ?
+                            <textarea
+                                type="text"
+                                value={tempDescription}
+                                onChange={(e) => setTempDescription(e.target.value)}
+                                className={`${styles.background} h-32 w-full text-white align-text-top ${styles.rounded} flex pl-2 mt-2 `}
+                            >
+                            </textarea>
+
+                            : <div className={`${styles.background} h-32 w-full text-white ${styles.rounded} flex pl-2 mt-2 overflow-y-scroll`} >
+                                {description}
+                            </div>
+
+                        }
+
+                        <div
+                            className={`${styles.background} h-5/6 w-full text-white ${styles.rounded} flex pl-2 mt-2 `}
+                        >
+                            code
+                        </div>
+
                     </div>
-
-                }
-
-                <div
-                    className={`${styles.background} h-5/6 w-full text-white ${styles.rounded} flex pl-2 mt-2 `}
-                >
-                    code
+                </> :
+                <div className="flex flex-col justify-center items-center  ">
+                    <FaRegEyeSlash className="text-9xl mt-52 text-green-900" />
+                    <h1 className="text-xl text-green-900">No snippets selected</h1>
                 </div>
-
-            </div>
+            }
 
         </ResizablePanel>
 

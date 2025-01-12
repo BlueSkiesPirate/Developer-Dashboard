@@ -9,8 +9,11 @@ import { FiEye } from "react-icons/fi";
 export default function Snippets({ onSendData }) {
     const [snippets, setSnippets] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [reload, setReload] = useState(false)
 
-
+    const triggerReload = () => {
+        setReload(!reload)
+    }
 
     const sendData = (snippet) => {
         onSendData(snippet)
@@ -31,10 +34,10 @@ export default function Snippets({ onSendData }) {
         };
 
         fetchSnippets();
-    }, []);
+    }, [reload]);
 
-    if (loading) return <p>Loading...</p>;
-    // if (snippets.length === 0) return <p>No snippets available.</p>;
+    if (loading) return <p className="text-white">Loading...</p>;
+
 
     return (
         <>
@@ -49,16 +52,14 @@ export default function Snippets({ onSendData }) {
                         className={`h-10 w-full ${styles.buttonDark} ${styles.rounded} text-white flex justify-center items-center px-2`}
                     >
                         {snippet.title}
-                        <FiEye onClick={() => sendData(snippet)} className={"ml-auto cursor-pointer"}> view</FiEye>
+                        <FiEye onClick={() => sendData(snippet)} className={"ml-auto mr-5 cursor-pointer"}> view</FiEye>
+                        <DeleteBtn id={snippet._id} onDelete={triggerReload} title={snippet.title} />
 
                     </div>
                     <div className={`h-full w-full text-white p-2 `}>
-                        {snippet.description}
-                        <div className={`flex mt-9`}>
-                            <button className={` text-cyan-500`}>update</button>
-                            <h2 className={'mx-3'}>|</h2>
-                            <DeleteBtn id={snippet._id} />
-                        </div>
+                        <div>{snippet.description.length > 300 ?
+                            `${snippet.description.slice(0, 300)}...`
+                            : snippet.description}</div>
                     </div>
                 </div>
             ))}
