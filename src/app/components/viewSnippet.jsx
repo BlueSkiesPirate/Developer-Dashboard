@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { updateSnippet } from "@/lib/api";
 import { FaRegEyeSlash } from "react-icons/fa";
 
-export default function ViewSnippet({ snippetData, isViewingSnippet, stopViewingSnippet }) {
+export default function ViewSnippet({ snippetData, isViewingSnippet, stopViewingSnippet, reloadThroughUpdate }) {
 
     const [edittingSnippet, setEdittingSnippet] = useState(false);
     const [title, SetTitle] = useState(snippetData.title)
@@ -36,9 +36,14 @@ export default function ViewSnippet({ snippetData, isViewingSnippet, stopViewing
         SetTitle(tempTitle)
         SetDescription(tempDescription)
         setEdittingSnippet(false)
+
         update()
 
     }
+
+    useEffect(() => {
+        reloadThroughUpdate()
+    }, [title])
 
     const update = async () => {
         await updateSnippet(id, { title: tempTitle, description: tempDescription })

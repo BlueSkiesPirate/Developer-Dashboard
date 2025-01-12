@@ -6,10 +6,13 @@ import DeleteBtn from "./deleteBtn";
 import { getSnippets } from "@/lib/api";
 import { FiEye } from "react-icons/fi";
 
-export default function Snippets({ onSendData, DoReload }) {
+export default function Snippets({ onSendData, DoReload, length }) {
     const [snippets, setSnippets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [reload, setReload] = useState(false)
+    const [currentlyViewing, setCurrentlyViewing] = useState(true) //This is to add a feature in which I can chhnage the styling of the snippet I select to add like a border color and such
+
+
 
     const triggerReload = () => {
         setReload(!reload)
@@ -17,6 +20,7 @@ export default function Snippets({ onSendData, DoReload }) {
 
     const sendData = (snippet) => {
         onSendData(snippet)
+        setCurrentlyViewing(true)
     }
 
 
@@ -32,9 +36,13 @@ export default function Snippets({ onSendData, DoReload }) {
                 setLoading(false);
             }
         };
-
+        console.log(currentlyViewing)
         fetchSnippets();
-    }, [reload, DoReload]);
+    }, [reload, DoReload, currentlyViewing]);
+
+    useEffect(() => {
+        length(snippets.length)
+    }, [snippets])
 
     if (loading) return <p className="text-white">Loading...</p>;
 
@@ -46,13 +54,13 @@ export default function Snippets({ onSendData, DoReload }) {
             {snippets.map((snippet, key) => (
                 <div
                     key={snippet._id}
-                    className={`h-36 w-full ${styles.background} ${styles.rounded} px-2 pt-2 mt-2`}
+                    className={`h-36 w-full ${styles.background} ${styles.rounded} px-2 pt-2 mt-2 `}
                 >
                     <div
                         className={`h-10 w-full ${styles.buttonDark} ${styles.rounded} text-white flex justify-center items-center px-2`}
                     >
                         {snippet.title}
-                        <FiEye onClick={() => sendData(snippet)} className={"ml-auto mr-5 cursor-pointer"}> view</FiEye>
+                        <FiEye onClick={() => sendData(snippet)} className={"ml-auto mr-5 cursor-pointer"} />
                         <DeleteBtn id={snippet._id} onDelete={triggerReload} title={snippet.title} />
 
                     </div>

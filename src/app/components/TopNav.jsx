@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import styles from "../page.module.css";
-
+import { FaUserCircle } from "react-icons/fa";
 
 export default function TopNav() {
   const router = useRouter();
@@ -32,11 +32,13 @@ export default function TopNav() {
           </div>
         </div>
         <div
-          className={` ${styles.navbar} w-10 h-full  ml-2 ${styles.rounded} `}
-        ></div>
+          className={` ${styles.navbar} w-10 h-full  ml-2 ${styles.rounded} flex justify-center items-center`}
+        >
+          <FaUserCircle className="text-3xl text-white" />
+        </div>
       </div>
       <div className={` ${styles.navbar} w-full h-10  mt-2 ${styles.rounded}`}>
-        {" "}
+
         {/**search bar container */}
       </div>
     </div>

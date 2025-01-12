@@ -21,15 +21,6 @@ export default function ToolMenu({ snippetData, edit, stopViewingSnippet }) {//{
     const handleEdit = async () => {
         edit()
     }
-
-    // const handleDelete = async () => {
-    //     const confirmed = confirm("are you sure?")
-    //     if (confirmed) {
-    //         await deleteSnippet(id)
-    //     }
-
-    // }
-
     return (
         <>
             <div className={`h-10 w-16 flex justify-center items-center ${styles.buttonDark} ${styles.rounded} ml-2 text-white relative`}>
@@ -37,7 +28,6 @@ export default function ToolMenu({ snippetData, edit, stopViewingSnippet }) {//{
                 <div className={`  ${noDisplay ? styles.noDisplay : " "} w-full h-32 absolute top-0 flex flex-col justify-around items-center bg-slate-900 border border-white rounded-xl`}> {/**${styles.componentLight} */}
                     <RiToolsFill className={`border-b-2 border-black w-1/2 flex justify-center cursor-pointer text-4xl `} onClick={handleDisplay} />
                     <TiEdit className={`cursor-pointer  text-purple-700 text-3xl`} onClick={handleEdit} />
-                    {/* <BiTrash className={`text-red-400 border-white text-black text-4xl `} onClick={handleDelete} /> */}
                     <DeleteBtn id={snippetData._id} onDelete={stopViewingSnippet} title={snippetData.title} />
                 </div>
             </div>
