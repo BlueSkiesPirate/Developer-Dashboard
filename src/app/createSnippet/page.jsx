@@ -16,11 +16,39 @@ export default function AddSnippet() {
     const [files, setFiles] = useState([])
     const [selectedFile, setSelectedFile] = useState(null)
     const [codeContent, setCodeContent] = useState("")
+    const [viewTags, setViewTags] = useState(false)
 
+    const handleViewTagsContainer = () => {
+        setViewTags(!viewTags)
+    }
+
+    const handleCreateTag = (tag) => {
+        console.log(tag)
+        setTags((prevTags) => {
+            if (!prevTags.includes(tag)) {
+
+                return [...prevTags, tag]
+            }
+            return prevTags
+        })
+    }
+
+    const handleRemoveTag = (tag) => {
+        setTags((prevTags) => prevTags.filter((t) => t !== tag))
+        console.log(tags)
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await createSnippet({ title, description, tags, code: files });
+
+        const serializedFiles = files.map((file) => ({
+            title: file.title,
+            lastmodified: file.lastmodified || new Date().toISOString(), // Default to now if not set
+            codeSection: file.codeSection,
+        }));
+
+        console.log(title, description, tags, serializedFiles)
+        await createSnippet({ title, description, tags, code: serializedFiles });
         alert("Snippet created!");
         const mainPage = '/'
         router.push(mainPage)
@@ -78,16 +106,49 @@ export default function AddSnippet() {
                         className={`h-10 w-3/4 ${styles.background} ${styles.rounded} flex`}
                     >
                         <div
-                            className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} `}
+                            className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} relative`}
                         >
-                            tags <IoIosAddCircle className="w-5 text-green-600 text-2xl cursor-pointer ml-2" />
+                            tags <IoIosAddCircle onClick={() => handleViewTagsContainer()} className={`w-5 ${viewTags ? "text-red-600" : "text-green-600"}  text-2xl cursor-pointer ml-2`} />
+
+
+                            {viewTags ?
+
+
+                                <div className="absolute  w-80 h-96 right-24 top-2">
+                                    <div className="h-10 w-full bg-red-500 flex justify-center items-center rounded-t-xl">tags</div>
+                                    <div className="h-full w-full bg-slate-600 rounded-b-xl p-2 flex flex-wrap items-start justify-evenly gap-0">
+
+                                        {["react", "Mongo", "CSS", "Router", "Auth", "Firebase"].map((tag) => (
+                                            <div
+                                                key={tag}
+                                                onClick={() => {
+                                                    if (tags.includes(tag)) {
+                                                        handleRemoveTag(tag);
+                                                    } else {
+                                                        handleCreateTag(tag);
+                                                    }
+                                                }}
+                                                className={`border-2 rounded w-20 h-10 flex justify-center items-center text-black hover:bg-green-300 hover:border-green-600 hover:border-4 cursor-pointer ${tags.includes(tag) ? "bg-green-500" : "bg-slate-200"}`}
+                                            >
+                                                {tag}
+                                            </div>))}
+                                    </div>
+                                </div>
+
+                                : ""
+                            }
+
+
+
                         </div>
-                        <div
-                            className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} ml-2 `}
-                        >
-                            {" "}
-                            react
-                        </div>
+
+                        {tags.map((tag, index) => (
+                            <div key={index} onClick={() => handleRemoveTag(tag)}
+                                className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} ml-2 cursor-pointer hover:bg-red-700 `}>
+                                {tag}
+                            </div>
+                        ))};
+
                     </div>
                     {/* <button className={` bg-green-500 rounded w-20 h-10 mr-5 ${edittingSnippet ? "" : "hidden"}`}>Update</button> */}
                 </div>
@@ -124,13 +185,19 @@ export default function AddSnippet() {
                             </div>
 
                             <div className=" w-full h-full pt-2 flex"> {/**This is where the files will be shown */}
+
                                 {files.map((file, index) => (
-                                    <div
-                                        key={index}
-                                        onClick={() => handleFileClick(file)}
-                                        className={`bg-slate-500 w-fit h-full flex justify-start items-center pl-1 pr-2 cursor-pointer hover:bg-slate-400 border-r-2  ${selectedFile === file ? "bg-green-500" : ""}`}>
-                                        {file.title}
-                                        <MdOutlineCancel onClick={() => handleRemoveFile(file)} className="ml-2 text-red-900 text-xl" />
+
+                                    <div key={index} className={` flex justify-center items-center  border-r-2  pr-2 ${selectedFile === file.title ? "bg-green-600 hover:bg-green-400" : "bg-slate-500 hover:bg-slate-400"}`}>
+
+                                        <div
+
+                                            onClick={() => handleFileClick(file)}
+                                            className={` w-fit h-full flex justify-start items-center pl-1  cursor-pointer `}>
+                                            {file.title}
+
+                                        </div>
+                                        <MdOutlineCancel onClick={() => handleRemoveFile(file)} className="ml-2 text-red-900 text-xl cursor-pointer " />
                                     </div>
                                 ))}
                             </div>
@@ -139,20 +206,32 @@ export default function AddSnippet() {
                         <div className="h-4/6">
 
                             <div className="absolute top-2/3 right-1/3  ">
-                                <FaCode className=" text-slate-900 text-9xl text-white" />
+                                <FaCode className=" text-slate-900 text-9xl " />
                             </div>
 
 
-                            <textarea
-                                type="text"
-                                placeholder="code"
-                                value={codeContent}
-                                required={true}
-                                onChange={handleCodeChange}
-                                className={`${styles.background} h-full w-full text-white rounded-b-xl flex pl-2 resize-none`}
-                            >
+                            {selectedFile ?
+                                <textarea
+                                    type="text"
+                                    placeholder="code"
+                                    value={codeContent}
+                                    required={true}
+                                    onChange={handleCodeChange}
+                                    className={`${styles.background} h-full w-full text-white rounded-b-xl flex pl-2 resize-none`}
+                                >
 
-                            </textarea>
+                                </textarea>
+
+                                :
+
+                                <div className={`${styles.background} h-full w-full text-slate-700 rounded-b-xl flex justify-center items-start resize-none pt-5 text-3xl`}>
+                                    {`Please select a file before writting code :${`)`}`}
+                                </div>
+
+                            }  {/**the : is very important don't delete*/}
+
+
+
                         </div>
                         <div className="w-full flex justify-center mt-2 ">
                             <button type="submit" className={`border px-8 py-2 bg-green-500`}>create Snippet</button>
