@@ -17,13 +17,13 @@ export default function AddSnippet() {
     const [selectedFile, setSelectedFile] = useState(null)
     const [codeContent, setCodeContent] = useState("")
     const [viewTags, setViewTags] = useState(false)
+    const mainPage = '/'
 
     const handleViewTagsContainer = () => {
         setViewTags(!viewTags)
     }
 
     const handleCreateTag = (tag) => {
-        console.log(tag)
         setTags((prevTags) => {
             if (!prevTags.includes(tag)) {
 
@@ -50,10 +50,13 @@ export default function AddSnippet() {
         console.log(title, description, tags, serializedFiles)
         await createSnippet({ title, description, tags, code: serializedFiles });
         alert("Snippet created!");
-        const mainPage = '/'
+
         router.push(mainPage)
     };
 
+    const handleCancel = () => {
+        router.push(mainPage)
+    }
 
     const handleCreateFile = () => {
         const fileName = prompt("Enter file name:")
@@ -97,11 +100,11 @@ export default function AddSnippet() {
     return (
 
         <div className="w-full h-screen bg-slate-800 flex justify-center overflow-hidden ">
-            <div className="h-full w-1/2 bg-slate-700 px-5">
+            <div className="h-full w-1/2 bg-slate-700 px-5 ">
 
 
 
-                <div className="flex justify-between mt-5">
+                <div className="flex justify-between mt-5 mt-20">
                     <div
                         className={`h-10 w-3/4 ${styles.background} ${styles.rounded} flex`}
                     >
@@ -205,9 +208,6 @@ export default function AddSnippet() {
                         </div>
                         <div className="h-4/6">
 
-                            <div className="absolute top-2/3 right-1/3  ">
-                                <FaCode className=" text-slate-900 text-9xl " />
-                            </div>
 
 
                             {selectedFile ?
@@ -226,6 +226,10 @@ export default function AddSnippet() {
 
                                 <div className={`${styles.background} h-full w-full text-slate-700 rounded-b-xl flex justify-center items-start resize-none pt-5 text-3xl`}>
                                     {`Please select a file before writting code :${`)`}`}
+                                    <div className="absolute top-2/3 right-1/3  ">
+                                        <FaCode className=" text-slate-900 text-9xl " />
+                                    </div>
+
                                 </div>
 
                             }  {/**the : is very important don't delete*/}
@@ -235,6 +239,7 @@ export default function AddSnippet() {
                         </div>
                         <div className="w-full flex justify-center mt-2 ">
                             <button type="submit" className={`border px-8 py-2 bg-green-500`}>create Snippet</button>
+                            <button onClick={() => handleCancel()} className={`ml-2 border px-8 py-2 bg-red-500`}>cancel</button>
                         </div>
 
                     </form>

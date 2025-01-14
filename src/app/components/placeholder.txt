@@ -1,0 +1,192 @@
+import { ResizablePanel } from "@/components/ui/resizable";
+import styles from "../page.module.css";
+import ToolMenu from "./toolsMenu";
+import { useState, useEffect } from "react";
+import { updateSnippet } from "@/lib/api";
+import { FaRegEyeSlash } from "react-icons/fa";
+import { IoIosAddCircle } from "react-icons/io";
+import { MdOutlineCancel } from "react-icons/md";
+
+export default function ViewSnippet({ snippetData, isViewingSnippet, stopViewingSnippet, reloadThroughUpdate }) {
+    const [edittingSnippet, setEdittingSnippet] = useState(false);
+    const [title, setTitle] = useState(snippetData.title);
+    const [description, setDescription] = useState(snippetData.description);
+    const [tags, setTags] = useState(snippetData.tags || []);
+    const [files, setFiles] = useState(snippetData.code || []);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [codeContent, setCodeContent] = useState("");
+    const [viewTags, setViewTags] = useState(false);
+
+    const id = snippetData._id;
+
+    useEffect(() => {
+        if (selectedFile) {
+            const file = files.find((f) => f.title === selectedFile);
+            setCodeContent(file?.codeSection || "");
+        }
+    }, [selectedFile]);
+
+    const toggleEditMode = () => {
+        setEdittingSnippet(!edittingSnippet);
+    };
+
+    const saveChanges = async () => {
+        await updateSnippet(id, { title, description, tags, code: files });
+        setEdittingSnippet(false);
+        reloadThroughUpdate();
+    };
+
+    const handleCreateTag = (tag) => {
+        if (!tags.includes(tag)) setTags([...tags, tag]);
+    };
+
+    const handleRemoveTag = (tag) => {
+        setTags(tags.filter((t) => t !== tag));
+    };
+
+    const handleCreateFile = () => {
+        const fileName = prompt("Enter file name:");
+        if (fileName) setFiles([...files, { title: fileName, codeSection: "" }]);
+    };
+
+    const handleRemoveFile = (fileToRemove) => {
+        setFiles(files.filter((file) => file.title !== fileToRemove.title));
+        if (selectedFile === fileToRemove.title) {
+            setSelectedFile(null);
+            setCodeContent("");
+        }
+    };
+
+    const handleCodeChange = (e) => {
+        const updatedCode = e.target.value;
+        setCodeContent(updatedCode);
+        setFiles(
+            files.map((file) =>
+                file.title === selectedFile ? { ...file, codeSection: updatedCode } : file
+            )
+        );
+    };
+
+    return (
+        <ResizablePanel className={`${styles.scrollPanel} ${styles.rounded} p-2 h-full`}>
+            {isViewingSnippet ? (
+                <>
+                    <div className="flex justify-between">
+                        {/* Tags Section */}
+                        <div className="flex items-center">
+                            <div className="flex items-center space-x-2">
+                                <button
+                                    className="text-green-600"
+                                    onClick={() => setViewTags(!viewTags)}
+                                >
+                                    Tags <IoIosAddCircle />
+                                </button>
+                                {tags.map((tag) => (
+                                    <span
+                                        key={tag}
+                                        className="bg-gray-300 text-black rounded px-2"
+                                        onClick={() => handleRemoveTag(tag)}
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                            {viewTags && (
+                                <div className="absolute bg-white shadow-md p-2 rounded">
+                                    {["React", "MongoDB", "CSS", "JavaScript"].map((tag) => (
+                                        <span
+                                            key={tag}
+                                            className="cursor-pointer p-1"
+                                            onClick={() =>
+                                                tags.includes(tag)
+                                                    ? handleRemoveTag(tag)
+                                                    : handleCreateTag(tag)
+                                            }
+                                        >
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        {/* Save Button */}
+                        {edittingSnippet && (
+                            <button
+                                onClick={saveChanges}
+                                className="bg-green-500 px-4 py-2 rounded"
+                            >
+                                Save
+                            </button>
+                        )}
+                    </div>
+                    {/* Title Section */}
+                    <div className="mt-2">
+                        {edittingSnippet ? (
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                className="w-full p-2 rounded"
+                            />
+                        ) : (
+                            <h2 className="text-lg font-bold">{title}</h2>
+                        )}
+                    </div>
+                    {/* Description Section */}
+                    <div className="mt-2">
+                        {edittingSnippet ? (
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="w-full p-2 rounded"
+                            />
+                        ) : (
+                            <p>{description}</p>
+                        )}
+                    </div>
+                    {/* Files Section */}
+                    <div className="mt-4">
+                        <div className="flex items-center space-x-2">
+                            <button
+                                className="bg-blue-500 text-white px-2 py-1 rounded"
+                                onClick={handleCreateFile}
+                            >
+                                Add File
+                            </button>
+                            {files.map((file) => (
+                                <div key={file.title} className="flex items-center space-x-1">
+                                    <span
+                                        className={`cursor-pointer ${
+                                            selectedFile === file.title
+                                                ? "font-bold text-green-500"
+                                                : ""
+                                        }`}
+                                        onClick={() => setSelectedFile(file.title)}
+                                    >
+                                        {file.title}
+                                    </span>
+                                    <MdOutlineCancel
+                                        className="text-red-500 cursor-pointer"
+                                        onClick={() => handleRemoveFile(file)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        {selectedFile && (
+                            <textarea
+                                value={codeContent}
+                                onChange={handleCodeChange}
+                                className="w-full mt-2 p-2 rounded h-40"
+                            />
+                        )}
+                    </div>
+                </>
+            ) : (
+                <div className="flex flex-col items-center">
+                    <FaRegEyeSlash className="text-9xl text-gray-500" />
+                    <p className="text-gray-500">No snippet selected</p>
+                </div>
+            )}
+        </ResizablePanel>
+    );
+}

@@ -1,7 +1,6 @@
 import connectMongoDB from "@/lib/db";
 import Snippet from "../../../../../models/snippet";
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
 
 export async function GET(req, { params }) {
   const { slug } = params;
@@ -15,10 +14,10 @@ export async function PUT(req, { params }) {
   try {
     await connectMongoDB();
     const { slug } = await params;
-    const { title, description } = await req.json();
+    const { title, description, tags, code } = await req.json();
     const updatedSnippet = await Snippet.findByIdAndUpdate(
       slug,
-      { title: title, description: description },
+      { title: title, description: description, tags: tags, code: code },
       { new: true }
     );
     if (!updatedSnippet) {

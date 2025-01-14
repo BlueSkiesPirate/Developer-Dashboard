@@ -36,7 +36,6 @@ export default function Snippets({ onSendData, DoReload, length }) {
                 setLoading(false);
             }
         };
-        console.log(currentlyViewing)
         fetchSnippets();
     }, [reload, DoReload, currentlyViewing]);
 
@@ -60,6 +59,16 @@ export default function Snippets({ onSendData, DoReload, length }) {
                         className={`h-10 w-full ${styles.buttonDark} ${styles.rounded} text-white flex justify-center items-center px-2`}
                     >
                         {snippet.title}
+
+                        <div className={`h-8 w-fit ml-auto pr-2 ${styles.background} ${styles.rounded} flex`}>
+                            {snippet.tags.map((tag, index) => (
+                                <div key={index}
+                                    className={`w-20 h-full ${styles.buttonDark} text-white flex justify-center items-center ${styles.rounded} ml-2 cursor-pointer`}>
+                                    {tag}
+                                </div>
+                            ))}
+                        </div>
+
                         <FiEye onClick={() => sendData(snippet)} className={"ml-auto mr-5 cursor-pointer"} />
                         <DeleteBtn id={snippet._id} onDelete={triggerReload} title={snippet.title} />
 

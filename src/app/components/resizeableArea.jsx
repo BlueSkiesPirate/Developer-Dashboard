@@ -14,7 +14,8 @@ import { useEffect, useState } from "react";
 
 
 export default function ResizeableArea() {
-  const [viewData, setViewData] = useState({ title: "title", description: "description" })
+
+  const [viewData, setViewData] = useState({})
   const [isViewingSnippet, setIsViewingSnippet] = useState(false)
   const [reloadSnippets, setReloadSnippets] = useState(false)
   const [length, setLength] = useState(0)//This is the length of the snippets array, whihc is used for the Results Btn
