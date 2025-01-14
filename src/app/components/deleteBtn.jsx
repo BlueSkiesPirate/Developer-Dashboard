@@ -1,26 +1,20 @@
 "use client"
+import { deleteSnippet } from "@/lib/api";
 import { useRouter } from "next/navigation"
 import { BiTrash } from "react-icons/bi";
+import Snippets from "./Snippets";
 
-export default function DeleteBtn({ id }) {
-    const router = useRouter();
+export default function DeleteBtn({ id, onDelete, title }) {
+
     const removeSnippet = async () => {
-
-
-
-        const confirmed = confirm("are you sure?")
-
+        const confirmed = confirm(`Are you sure you want to delete " ${title} " ?`)
         if (confirmed) {
-            const res = await fetch(`http://localhost:3000/api/snippets?id=${id}`, {
-                method: "DELETE"
-            })
-            if (res.ok) {
-                router.refresh()
-            }
+            await deleteSnippet(id)
+            onDelete()
         }
     }
     return (
 
-        <BiTrash onClick={removeSnippet} className={`text-red-400 border-white text-black text-xl `} />
+        <BiTrash onClick={removeSnippet} className={`text-red-400 border-white text-black text-xl cursor-pointer`} />
     )
 }

@@ -17,6 +17,23 @@ body {
   }
 }
 
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #232a42; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8388c2; /* Color of the scrollbar thumb */
+  border-radius: 6px; /* Rounded corners for the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d1d2e4; /* Color of the scrollbar thumb on hover */
+}
+
 @layer base {
   * {
     @apply border-border;
