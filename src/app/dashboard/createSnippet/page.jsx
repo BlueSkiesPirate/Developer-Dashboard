@@ -2,7 +2,7 @@
 import { useState } from "react"
 import { createSnippet } from "@/lib/api";
 import { useRouter } from "next/navigation";
-import styles from "../page.module.css"
+import styles from "../../page.module.css"
 import { IoIosAddCircle } from "react-icons/io";
 import { FaCode } from "react-icons/fa6";
 import { MdOutlineCancel } from "react-icons/md";
@@ -17,7 +17,7 @@ export default function AddSnippet() {
     const [selectedFile, setSelectedFile] = useState(null)
     const [codeContent, setCodeContent] = useState("")
     const [viewTags, setViewTags] = useState(false)
-    const mainPage = '/'
+    const mainPage = '/dashboard'
 
     const handleViewTagsContainer = () => {
         setViewTags(!viewTags)
